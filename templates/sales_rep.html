@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+    {% block title %}{{ basic["title"] }}{% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style type="text/css">
+            .important { color: #336699; }
+        </style>
+
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block content %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div >
+                    <div class="panel-header bg-primary-gradient">
+                        <div class="page-inner py-5">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div>
+                                    <h2 class="text-white pb-2 fw-bold">{{ basic['title'] }}</h2>
+                                </div>
+                                <div class="ml-md-auto py-2 py-md-0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-inner mt--5">
+                        <div class="card">
+                            <div class="row">
+                                <div class="card-header">
+
+                                </div>
+							<br>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                    <form class="form"  id="filters">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <label for="product_type">Tipo de Producto</label><br>
+                                                <select class="form-control" id="product_type" name="product_type" required >
+                                                    <option>Seleccione tipo producto</option>
+                                                    {% for piece in data["product_type"] %}
+                                                        <option value="{{ piece['code'] }}">
+                                                            {{ piece["tpname"] }}
+
+                                                        </option>
+                                                     {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label for="category">Categoria de Producto</label><br>
+                                                <select class="form-control" id="category" name="category" required >
+                                                    <option>Seleccione categoria</option>
+                                                    <option value="0">Todos</option>
+                                                    {% for piece in data["categories"] %}
+                                                        <option value="{{ piece['code'] }}">
+                                                            {{ piece["cat_name"] }}
+
+                                                        </option>
+                                                     {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label for="category">Tipo de Categoria</label><br>
+                                                <select class="form-control" id="produ_type" name="produ_type" required >
+                                                    <option>Seleccione tipo de categoría</option>
+                                                    {% for piece in data["cat_type"] %}
+                                                        <option value="{{ piece['code'] }}">
+                                                            {{ piece["tpname"] }}
+
+                                                        </option>
+                                                     {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="form-group col-lg-6">
+                                                <label for="from">Desde</label>
+                                                <input type="date" class="form-control date" id="from" name="from" placeholder="Desde" required >
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label for="end">Hasta</label>
+                                                <input type="date" class="form-control date" id="end" name="end" placeholder="Hasta" required >
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="from"></label>
+                                            <input class="btn btn-primary" style= "display: inherit;" type="submit" name="filter_report" value="Buscar" />
+                                        </div>
+
+                                    </form>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">Reporte de Ventas</h3>
+                                            </div>
+                                            <div class="panel-body table_panel">
+                                                <div class="table-responsive">
+                                                <table class="table table-hover display" id="sales_rep_table" cellspacing="0" width="100%">
+                                                  <thead>
+                                                    <th>NOMBRE</th>
+                                                    <th>UNIDAD</th>
+                                                    <th>INICIAL</th>
+                                                    <th>CNT COMPRADA</th>
+                                                    <th>CNT VENDIDA</th>
+                                                    <th>DIFERENCIA</th>
+                                                    <th>MONTO VENDIDO</th>
+                                                  </thead>
+                                                  <tfoot>
+                                                    <tr>
+                                                        <th>      </th>
+                                                        <th>      </th>
+                                                        <th>       </th>
+                                                        <th>            </th>
+                                                        <th>           </th>
+                                                        <th>    TOTAL </th>
+                                                        <th>    RD$<span id="total"></span></th>
+                                                    </tr>
+                                                  </tfoot>
+                                                  <tbody>
+                                                  </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+        <!-- jQuery UI -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+        <!-- Chart JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+        <!-- Chart Circle -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+        <!-- Datatables -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+        <!-- Sweet Alert -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+        <!-- Atlantis JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/sales_rep.js')}}"></script>
+
+    {% endblock %}

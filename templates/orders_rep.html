@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+    {% block title %}{{ basic["title"] }}{% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style type="text/css">
+            .important { color: #336699; }
+        </style>
+
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block content %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div >
+                    <div class="panel-header bg-primary-gradient">
+                        <div class="page-inner py-5">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div>
+                                    <h2 class="text-white pb-2 fw-bold">{{ basic['title'] }}</h2>
+                                </div>
+                                <div class="ml-md-auto py-2 py-md-0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-inner mt--5">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-head-row">
+                                        <div class="card-title"></div>
+                                        <div class="card-tools">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                     <div class="row">
+                <!--<div class="col-md-6">-->
+                    <!--<div class="form-group">-->
+                        <!--<label id="product_name_lbl">Nombre</label>-->
+                        <!--<input id="item_name" name="item_name"-->
+                               <!--class="form-control" placeholder="Nombre">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="col-md-12 no-print">
+
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label id="category_lbl">No de orden</label>
+                            <input id="order" name="order"
+                                   class="form-control" />
+                        </div>
+                        <button class="btn btn-primary" id="filters">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+                                     <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered" id="report_tbl">
+                                                <thead>
+                                                    <tr>
+                                                        <td>
+                                                            Nombre
+                                                        </td>
+                                                        <td width="50px">
+                                                            Cliente
+                                                        </td>
+                                                        <td width="150px">
+                                                            Mesero
+                                                        </td>
+                                                        <td width="80px">
+                                                            Fecha
+                                                        </td>
+                                                        <td>
+                                                            Hora
+                                                        </td>
+                                                        <td>
+                                                            Estado
+                                                        </td>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="item_tbd">
+
+                                                </tbody>
+                                            </table>
+                                            <button class="btn btn-warning" onClick="tableToExcel('report_tbl', 'reporte_ordenes', 'reporte_ordenes.xls');"><i class="fa fa-table"></i>Exportar</button>
+
+                                            <a id="dlink"  style="display:none;"></a>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                           <div class="alert alert-secondary" role="alert">
+                                              <p id="paytype"></p>
+                                              <hr>
+
+                                              <p id="subtotal"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+        <!-- jQuery UI -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+        <!-- Chart JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+        <!-- Chart Circle -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+        <!-- Datatables -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+        <!-- Sweet Alert -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+        <!-- Atlantis JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/orders_rep.js')}}"></script>
+        <script>
+            var tableToExcel = (function () {
+            var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+            return function (table, name, filename) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = filename;
+                document.getElementById("dlink").click();
+
+            }
+        })();
+        </script>
+    {% endblock %}

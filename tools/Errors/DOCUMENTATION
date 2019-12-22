@@ -1,0 +1,7 @@
+Este documento contendra una lista de errores y sus razones,
+para cuando sea hecho el sistema de errores.
+
+1) Connection error:
+	User name, password, DBName, host, port, have some mistake.
+2) Compatibility error:
+	Cannot compare a integer with a string. 

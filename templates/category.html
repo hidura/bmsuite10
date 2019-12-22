@@ -1,0 +1,219 @@
+
+{% extends "base.html" %}
+    {% block title %}{{ basic["title"] }}{% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style type="text/css">
+            .important { color: #336699; }
+        </style>
+
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block content %}
+
+        <div class="main-panel">
+            <div class="content">
+                <div >
+                    <div class="panel-header bg-primary-gradient">
+                        <div class="page-inner py-5">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div>
+                                    <h2 class="text-white pb-2 fw-bold">{{ basic['title'] }}</h2>
+                                </div>
+                                <div class="ml-md-auto py-2 py-md-0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-inner mt--5">
+                        <div class="col-sm-12 main_content" id="main_content" style="margin-top: 15px;">
+                            <div class="row">
+                            <div class="row main_content">
+                                <div id="main_content" class="col-lg-12">
+                                    <div class="table-responsive">
+                                            <table class="table table-hover display" id="categories_table" cellspacing="0" width="100%">
+                                              <thead>
+                                                <th>Categoria</th>
+                                                <th>Tipo Producto</th>
+                                                <th>Tipo Categoria</th>
+                                                <th>Compañía</th>
+                                                <th>Printer</th>
+                                                <th>Estatus</th>
+                                                <th style="width: 70px;">Accion</th>
+                                              </thead>
+                                              <tfoot>
+                                                <tr>
+                                                    <th>Categoria</th>
+                                                    <th>Tipo Producto</th>
+                                                    <th>Tipo Categoria</th>
+                                                    <th>Compañía</th>
+                                                    <th>Printer</th>
+                                                    <th>Estatus</th>
+                                                    <th style="width: 70px;">Accion</th>
+                                                </tr>
+                                              </tfoot>
+
+                                              <tbody>
+                                              </tbody>
+                                            </table>
+                                            </div>
+                                </div>
+                            </div>
+                            <!-- EDITAR category -->
+                            <div class="modal fade" role="dialog" id="edit_category">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Editar categoría</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <form id="edit_category_form" class="row">
+                                                <div class="form-group col-lg-4">
+                                                    <label for="code">Código</label>
+                                                    <input type="number" readonly class="form-control" id="code" name="code" placeholder="Código" required >
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="cat_name">Nombre</label>
+                                                    <input type="text" class="form-control" id="cat_name" name="cat_name" placeholder="Nombre" required >
+                                                </div>
+
+
+                                                <div class="form-group col-lg-4">
+                                                    <label for="avatar">Avatar</label><br>
+                                                    <div class="row">
+                                                        <img style="width: 200px;height: 200px;" src="images/dinner.png" id="avatar_preview" alt="200x200" class="img-thumbnail float-center">
+                                                    </div>
+                                                    <input type="file" class="form-control" id="avatar" name="avatar" placeholder="Avatar" required >
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="type_product">Tipo de productos</label><br>
+                                                    <select class="form-control" id="type_product" name="type_product" required>
+                                                      </select>
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="type">Tipo</label><br>
+                                                    <select class="form-control" id="type" name="cat_type" required>
+                                                      </select>
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="printer">Printer</label>
+                                                    <select class="form-control" id="printer" name="printer" required>
+                                                        <option></option>
+                                                      </select>
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="company">Empresa</label><br>
+                                                    <select class="form-control" id="company" name="company">
+                                                      </select>
+                                                </div>
+                                                <div class="form-group col-lg-4">
+                                                    <label for="status">Status</label><br>
+                                                    <select class="form-control" id="status" name="status" required>
+                                                        <option value="11">Activo</option>
+                                                        <option value="12">Inactivo</option>
+                                                      </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" id="del_category_btn" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" id="edit_category_btn">Editar</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Delete user modal -->
+                            <div class="modal fade" tabindex="-1" role="dialog" id="delete_category">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h4 class="modal-title">Eliminar Categoria</h4>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+
+                                      </div>
+
+                                      <div class="modal-body">
+                                        Estas seguro que deseas eliminar esta categoría?
+                                          <input type="hidden" id="delete_code" value="0"/>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" id="delete_category_btn">Eliminar</button>
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </div>
+
+                        </div>
+                        </div>
+					</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+        <!-- jQuery UI -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+        <!-- Chart JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+        <!-- Chart Circle -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+        <!-- Datatables -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+        <!-- Sweet Alert -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+        <!-- Atlantis JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/category.js')}}"></script>
+        <style>
+            table{
+                font-family: Cambria,serif;
+                text-transform: uppercase;
+                font-size: 11px;
+            }
+        </style>
+
+    {% endblock %}

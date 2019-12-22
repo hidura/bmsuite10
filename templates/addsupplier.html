@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}{{ basic["title"] }}{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+
+<link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+
+<div class="main-panel">
+    <div class="content">
+        <div>
+            <div class="panel-header bg-primary-gradient">
+                <div class="page-inner py-5">
+                    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                        <div>
+                            <h2 class="text-white pb-2 fw-bold">{{ basic['title'] }}</h2>
+                        </div>
+                        <div class="ml-md-auto py-2 py-md-0">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner mt--5">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title"></div>
+                                <div class="card-tools">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="forms"  action="{{url_for('addnewsupplier')}}"
+                      enctype=multipart/form-data method="POST" target="my_iframe">
+                                <div class="container container-login animated fadeIn" style="display: block;">
+                                <h3 class="text-center">{{ basic['title'] }}</h3>
+                                <div class="login-form">
+                                    <div class="form-group">
+                                        <label for="name">Nombre de la empresa</label>
+                                        <input type="text" class="form-control" id="sup_name"
+                                               name="sup_name" placeholder="Ingrese el nombre de la empresa">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">RNC</label>
+                                        <input type="text" class="form-control" id="rnc"
+                                               name="rnc" placeholder="Ingrese el rnc de la empresa">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="username">Email Address</label>
+                                        <input type="email" class="form-control" id="email"
+                                               name="email" placeholder="Ingrese su nombre de usuario">
+                                        <small class="form-text text-muted">Este es el correo al que lo contactaran sus clientes.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Nombre</label>
+                                        <input type="text" class="form-control" id="first_name"
+                                               name="first_name" placeholder="Ingrese su nombre">
+                                        <small class="form-text text-muted">Favor colocar su nombre personal.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Apellidos</label>
+                                        <input type="text" required class="form-control" id="last_name" value="{{basic['last_name']}}"
+                                               name="last_name" placeholder="Ingrese su apellido">
+                                        <small class="form-text text-muted">Favor colocar su nombre personal.</small>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="name">Logo de su empresa</label>
+                                        <input type="file" class="form-control" id="avatar"
+                                               name="avatar" >
+                                        <small class="form-text text-muted">Ira anexado en cada cotización.</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Dirección</label>
+                                        <input type="text" class="form-control" id="_address"
+                                               name="_address" placeholder="Dirección completa">
+                                        <small class="form-text text-muted">Si tiene mas de uno solo coloque el principal.</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Telefono</label>
+                                        <input type="text" class="form-control" id="telephone"
+                                               name="telephone" placeholder="(888)-555-5555">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Telefono 2</label>
+                                        <input type="text" class="form-control" id="cellphone"
+                                               name="cellphone" placeholder="(888)-555-5555">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="passwd">Password</label>
+                                        <input type="password" class="form-control" id="passwd"
+                                               name="passwd" placeholder="Contraseña">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="passwd2">Password</label>
+                                        <input type="password" class="form-control" id="passwd2"
+                                               name="passwd2" placeholder="Repetir Contraseña">
+                                    </div>
+                                    <input value="71" id="usertype" name="usertype" type="hidden"/>
+                                    <div class="form-action mb-3" style="text-align: center;">
+                                        <input type="submit" class="btn btn-primary btn-rounded btn-login"
+                                               value="Registro">
+                                    </div>
+
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--   Core JS Files   -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+<!-- jQuery UI -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+<!-- jQuery Scrollbar -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+<!-- Chart JS -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+<!-- jQuery Sparkline -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+<!-- Chart Circle -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+<!-- Datatables -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+<!-- Bootstrap Notify -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+<!-- jQuery Vector Maps -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+<!-- Sweet Alert -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+<!-- Atlantis JS -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+{% endblock %}

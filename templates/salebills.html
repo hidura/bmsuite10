@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% block title %}{{ basic["title"] }}{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+
+<link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+
+<div class="main-panel">
+    <div class="content">
+        <div>
+            <div class="panel-header bg-primary-gradient">
+                <div class="page-inner py-5">
+                    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                        <div>
+                            <h2 class="text-white pb-2 fw-bold">{{ basic['title'] }}</h2>
+                        </div>
+                        <div class="ml-md-auto py-2 py-md-0">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner mt--5">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title"></div>
+                                <div class="card-tools">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-md-10" id="main_content">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Facturación</h3>
+										</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-lg-12">
+													<form id="add_module_user_form">
+														<div class="form-group col-lg-12">
+															<label for="client">Cliente</label>
+															<div class="form-group input-group">
+																<select class="form-control" id="client"
+																	   name="client" required="">
+																</select>
+																<span class="input-group-addon">
+																	<button class="btn btn-info" onClick="addClient(); return false;">
+																		<i class="fa fa-search"></i></button></span>
+															</div>
+														</div>
+
+														<div class="form-group col-lg-12">
+															<label for="group">NCF</label>
+															<select class="form-control" id="ncftype" name="ncftype" required="true" >
+																<option value="0" selected>Seleccione un tipo de comprobante</option>
+															</select>
+														</div>
+
+														<div class="form-group col-lg-12">
+															<label for="group">Referencia</label>
+															<input type="text" class="form-control" id="group" name="group" required="">
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Información de pago</h3>
+										</div>
+										<div class="panel-body">
+											<div class="form-group col-lg-12">
+												<label for="paytype">Tipo de pago</label>
+												<select id="paytype">
+													<option value="0">Seleccione un tipo de pago</option>
+												</select>
+											</div>
+											<div class="col-lg-12">
+												<label for="paytype">Sub-Total</label>
+													<span id="subtotal">0.00</span>
+											</div>
+
+											<div class="col-lg-12">
+												<label for="paytype">Impuestos</label>
+													<span id="tax">0.00</span>
+											</div>
+											<div class="col-lg-12">
+												<label for="paytype">Descuento</label>
+													<span id="total_discount">0.00</span>
+											</div>
+											<div class="col-lg-12">
+												<hr/>
+												<label for="paytype">Total</label>
+														<strong id="total">0.00</strong>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Productos</h3>
+										</div>
+										<div class="panel-body table_panel">
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="form-group">
+														<label for="product">Producto</label>
+														<select class="form-control" id="product" name="product" >
+														</select>
+													</div>
+												</div>
+												<div class="col-lg-2">
+													<div class="form-group">
+														<label for="amount">Cantidad</label>
+														<input type="number" class="form-control" id="amount" name="amount"/>
+													</div>
+												</div>
+												<div class="col-lg-2">
+													<div class="form-group">
+														<label for="discount">Descuento(%)</label>
+														<input type="number" class="form-control" id="discount" name="discount"/>
+													</div>
+												</div>
+												<div class="col-lg-2">
+													<div class="form-group">
+														<br/>
+														<button id="add_product" class="btn btn-default">Agregar</button>
+													</div>
+												</div>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-hover display" id="products_bill" cellspacing="0" width="100%">
+												  <thead>
+												  	<th>Nombre</th>
+												  	<th>Cantidad</th>
+												  	<th>Precio</th>
+												  	<th>Subtotal</th>
+												  	<th>Descuento</th>
+												  	<th>Impuesto</th>
+												  	<th>Total</th>
+											  		<th style="width: 70px;">Accion</th>
+												  </thead>
+												  <tbody id="products_tbd">
+												  </tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<button id="save_bill" type="submit" class="btn btn-default">Salvar</button>
+								</div>
+							</div>
+						</div>
+                            <div class="print-only">
+					<div class="row">
+						<div class="col-lg-7">
+							<div class="panel panel-default">
+								<div class="panel-heading" style="text-align: center">
+									<h3 class="panel-title" id="company_name">FahFoud</h3>
+									<h3 class="panel-title" id="company_rnc">1-31-43060-2</h3>
+									<h3 class="panel-title" id="company_telephone">809-756-7148</h3>
+									<h3 class="panel-title" id="company_direction">FoodTruck Town</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-lg-4">
+												<div class="form-group col-lg-12">
+													<label for="client_name_print">Nombre de cliente:</label>
+													<label id="client_name_print"></label>
+												</div>
+
+												<div class="form-group col-lg-12">
+													<label for="rnc">RNC:</label>
+													<label id="rnc" ></label>
+												</div>
+												<div class="form-group col-lg-12">
+													<label for="ncf">NCF:</label>
+													<label id="ncf" ></label>
+												</div>
+												<div class="form-group col-lg-12">
+													<label for="billcode">Codigo de factura:</label>
+													<label id="billcode" ></label>
+												</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="form-group col-lg-12">
+												<label for="date">Fecha:</label>
+												<label id="date"></label>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group col-lg-12">
+								<label type="text" style="text-align: center;" id="ncf_type"></label>
+							</div>
+							<div class="panel panel-default">
+
+								<div class="panel-body table_panel">
+									<div class="table-responsive">
+										<table class="table table-hover display" id="products_bill_print" cellspacing="0" width="100%">
+										  <thead>
+											<th>Nombre</th>
+											<th>Cantidad</th>
+											<th>Precio</th>
+											<th>Subtotal</th>
+											<th>Descuento</th>
+											<th>Impuesto</th>
+											<th>Total</th>
+										  </thead>
+										  <tbody id="products_tbd_print">
+										  </tbody>
+										</table>
+									</div>
+								</div>
+								<div class="col-lg-5">
+									<br/>
+									<br/>
+									<div class="panel panel-default" style="text-align: right;">
+
+										<div class="form-group col-lg-12">
+											<label for="subtotal">Subtotal:</label>
+											<label id="subtotal_print">0.00</label>
+										</div>
+										<div class="form-group col-lg-12">
+											<label for="subtotal">Impuestos:</label>
+											<label id="tax_print">0.00</label>
+										</div>
+										<div class="form-group col-lg-12">
+											<label for="subtotal">Descuento:</label>
+											<label id="disc_print">0.00</label>
+										</div>
+										<div class="form-group col-lg-12">
+											<label for="subtotal">Total:</label>
+											<label id="total_print">0.00</label>
+										</div>
+
+										<br/>
+										<br/>
+										<br/>
+										<br/>
+										<div class="form-group col-lg-12">
+											<label for="exp_date">Fecha de expiracion NCF:</label>
+											<label id="exp_date">31/12/2019</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--   Core JS Files   -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+<!-- jQuery UI -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+<!-- jQuery Scrollbar -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+<!-- Chart JS -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+<!-- jQuery Sparkline -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+<!-- Chart Circle -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+<!-- Datatables -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+<!-- Bootstrap Notify -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+<!-- jQuery Vector Maps -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+<!-- Sweet Alert -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+<!-- Atlantis JS -->
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/salebills.js')}}"></script>
+{% endblock %}

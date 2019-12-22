@@ -1,0 +1,8 @@
+{
+  "name": "BMSUITE",
+  "version": "5.0.0",
+  "description": "This is the version that the clients(Restaurants mostly) are using.",
+  "dependencies": {
+    
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "postgres": "postgresql+psycopg2://sugelico:#GbUsa1776@@bms301.bmsuite.io/sugelico",
+  "mongo": {"db": "sugelico_erp_test","user": "sugelico","password": "#GbUsa1776@", "port":29642,
+    "host":"bms301.bmsuite.io"},"secret_key": "7ad28dac9b8400d820fc08929fbe08a0581327c4",
+  "mail": {"host": "smtp.gmail.com","username": "codeservicecorp@gmail.com",
+    "port": 465, "password": "@60K72017#m", "mail": "codeservicecorp@gmail.com","ssl": "True"}
+
+}

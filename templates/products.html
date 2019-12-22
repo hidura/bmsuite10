@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+    {% block title %}{{ basic["title"] }}{% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style type="text/css">
+            .important { color: #336699; }
+        </style>
+
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block content %}
+
+        <div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-primary-gradient">
+					<div class="page-inner py-5">
+						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+							<div>
+								<h2 class="text-white pb-2 fw-bold">{{ basic["title"] }}</h2>
+							</div>
+							<div class="ml-md-auto py-2 py-md-0">
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner mt--5">
+					<div class="row mt--2">
+						<div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div >
+                                                <div class="row">
+                                                    <div class="col-sm-12 main_content" id="main_content">
+                                                        <div class="row">
+
+                                                            <div class="col-lg-12">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading">
+                                                                        <h3 class="panel-title">Lista de productos</h3>
+                                                                    </div>
+                                                                    <div class="panel-body table_panel">
+
+                                                                        <div class="table-responsive">
+                                                                        <table class="table table-hover display" id="products_table" cellspacing="0" width="100%">
+                                                                          <thead>
+                                                                            <th>Codigo</th>
+                                                                            <th>Nombre</th>
+                                                                            <th>Cantidad</th>
+                                                                            <th>Precio</th>
+                                                                            <th>Suplidor</th>
+                                                                            <th>Categoria</th>
+                                                                            <th>Estado</th>
+                                                                            <th style="width: 70px;">Accion</th>
+                                                                          </thead>
+                                                                          <tfoot>
+                                                                            <tr>
+                                                                                <th>Codigo</th>
+                                                                                <th>Nombre</th>
+                                                                                <th>Cantidad</th>
+                                                                                <th>Precio</th>
+                                                                                <th>Suplidor</th>
+                                                                                <th>Categoria</th>
+                                                                                <th>Estado</th>
+                                                                                <th style="width: 70px;">Accion</th>
+                                                                            </tr>
+                                                                          </tfoot>
+                                                                          <tbody>
+                                                                          </tbody>
+                                                                        </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- EDITAR PRODUCTOS -->
+
+                                    <div class="modal fade" role="dialog" id="edit_product">
+                                      <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h4 class="modal-title">Editar producto</h4>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                          </div>
+                                          <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="panel panel-default">
+
+                                                        <div class="panel-body">
+                                                            <form id="edit_product_form" class="col-lg-12">
+                                                                <div class="form-group col-lg-5">
+                                                                    <label for="item_name">Nombre</label>
+                                                                    <input type="text" class="form-control" id="item_name" name="item_name" placeholder="Nombre" required >
+                                                                </div>
+                                                                <div class="form-group col-lg-5">
+                                                                    <label for="barcode">Código de barra</label>
+                                                                    <input type="text" class="form-control" id="barcode" name="barcode" placeholder="Código de barra" required >
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="avatar">avatar</label><br>
+                                                                    <div class="row">
+                                                                        <img style="width: 200px;height: 200px;" src="images/dinner.png"  id="avatar_preview" alt="200x200" class="img-thumbnail float-center">
+                                                                    </div>
+                                                                    <input type="file" class="form-control" id="avatar" name="avatar" placeholder="Avatar" required >
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="item_type">Tipo</label>
+                                                                    <select class="form-control" id="item_type" name="item_type" required>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="amount">Cantidad</label>
+                                                                    <input type="number" value="0" class="form-control"
+                                                                           id="amount" name="amount" placeholder="Cantidad" required >
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="subtotal">Subtotal</label>
+                                                                    <input type="number" class="form-control"
+                                                                           onChange="calculateTax(this); return false;" id="subtotal"
+                                                                           name="subtotal" placeholder="Precio" required >
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="item_type">Impuestos</label>
+                                                                    <select class="form-control" multiple id="taxes"
+                                                                            onChange="addTax(this); return false;" name="taxes" required>
+                                                                      </select>
+                                                                    <input type="hidden" id="tax" name="tax" value="0.00"/>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="price">Precio</label>
+                                                                    <input type="number" readonly class="form-control"
+                                                                           id="price" name="price" placeholder="Precio" required >
+                                                                </div>
+
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="sale_unit">Unidad de Venta</label>
+                                                                    <select class="form-control" id="sale_unit" name="sale_unit" required >
+                                                                      </select>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="category">Categoria</label>
+                                                                    <select class="form-control" id="category" name="category" required >
+                                                                      </select>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="supplier">Suplidor</label>
+                                                                    <select class="form-control" id="supplier" name="supplier" required >
+                                                                      </select>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="description">Descripcion</label>
+                                                                    <textarea rows="3" class="form-control" id="description"
+                                                                              name="description"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-lg-6">
+                                                                    <label for="status">Status</label><br>
+                                                                    <select class="form-control" id="status" name="status">
+                                                                        <option value="11">Activo</option>
+                                                                        <option value="12">Inactivo</option>
+                                                                      </select>
+                                                                </div>
+                                                            </form>
+                                                            <div class="col-lg-12 ">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading">
+                                                                        <h3 class="panel-title">Opciones</h3>
+                                                                    </div>
+                                                                    <div class="panel-body" >
+                                                                        <div class="row">
+
+                                                                            <button class="btn btn-default btn-md"
+                                                                                    onClick="addCompounds(this); return false;">
+                                                                                <i class="fa fa-plus-circle"></i>
+                                                                                <br/>
+                                                                                Agregar componentes
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-md"
+                                                                                    onClick="addRecipe(); return false;">
+                                                                                <i class="fa fa-plus-circle"></i>
+                                                                                <br/>
+                                                                                Agregar Recetas
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-md"
+                                                                                    onClick="addTerms(this); return false;">
+                                                                                <i class="fa fa-plus-circle"></i>
+                                                                                <br/>
+                                                                                Agregar terminos
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-md"
+                                                                                     onClick="addCompanions(this); return false;">
+                                                                                <i class="fa fa-plus-circle"></i>
+                                                                                <br/>
+                                                                                Agregar Guarniciones
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-md"
+                                                                                    onClick="addOptions(this); return false;">
+                                                                                <i class="fa fa-plus-circle"></i>
+                                                                                <br/>
+                                                                                Agregar opcionales
+                                                                            </button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="edit_product_btn">Editar</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                          </div>
+                                        </div><!-- /.modal-content -->
+                                      </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+
+                                    <!-- Delete Product modal -->
+                                    <div class="modal fade" role="dialog" id="delete_product">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h4 class="modal-title">Eliminar Producto</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                          </div>
+                                          <div class="modal-body">
+                                            Estas seguro que deseas eliminar este producto?
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="delete_product_btn">Eliminar</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                          </div>
+                                        </div><!-- /.modal-content -->
+                                      </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+        <!--   Core JS Files   -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+        <!-- jQuery UI -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+        <!-- Chart JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+        <!-- Chart Circle -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+        <!-- Datatables -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+        <!-- Sweet Alert -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+        <!-- Atlantis JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/modules.js')}}"></script>
+	    <script type="text/javascript" src="{{ url_for('static', filename='js/products.js')}}"></script>
+
+    {% endblock %}

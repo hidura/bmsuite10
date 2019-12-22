@@ -1,0 +1,323 @@
+
+    {% extends "base.html" %}
+    {% block title %}{{ basic["title"] }}{% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style type="text/css">
+            .important { color: #336699; }
+        </style>
+
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block content %}
+        <div class="main-panel">
+            <div class="content">
+                <div >
+                    <div class="panel-header bg-primary-gradient">
+                        <div class="page-inner py-5">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div>
+                                    <h2 class="text-white pb-2 fw-bold">{{ basic["title"] }}</h2>
+                                </div>
+                                <div class="ml-md-auto py-2 py-md-0">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-inner mt--5">
+                        <div class="row">
+                            {% if data[0]['status']|int==102 %}
+                                <form form id="forms" class="row" action="{{url_for('mark_receive')}}"
+                      enctype=multipart/form-data method="POST" target="_blank">
+                            {% elif data[0]['status']|int==104 %}
+                                <form form id="forms" class="row"
+                      enctype=multipart/form-data method="POST" target="_blank">
+                            {% else %}
+                                <form form id="forms" class="row" action="{{url_for('take_order')}}"
+                      enctype=multipart/form-data method="POST" target="_blank">
+                            {% endif %}
+                                <input type="hidden" name="orderid" value="{{ data[0]['ordercode'] }}"/>
+                                <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-head-row">
+                                            <div class="card-title">Dato del comprador</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                                <div class="form-group col-lg-6">
+                                                    <label for="order_name">Empresa</label><br/>
+                                                    <strong>{{ data[0]['cl_name'] }}</strong>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="supplier">Contacto</label><br/>
+                                                        <strong>{{ data[0]['contact_name'] }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="date">Fecha de la orden</label><br/>
+                                                    <strong>{{ data[0]['ordergendate'] }}</strong>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="date">Fecha de recepción</label><br/>
+                                                    <strong>{{ data[0]['order_receive'] }}</strong>
+                                                    <small class="form-text text-muted">Fecha que el cliente desea recibir el producto.</small>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="hour">Telefono</label><br/>
+                                                    <strong>{{ data[0]['telephone'] }}</strong>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="date">Dirección de envio</label><br/>
+                                                    <strong>{{ data[0]['_address'] }}</strong>
+                                                </div>
+                                                <div class="form-group col-lg-12">
+                                                    {% if data[0]['status']|int==10 %}
+                                                        <div class="alert alert-primary" role="alert">
+                                                            <strong>{{ data[0]['status_name'] }}</strong>
+                                                        </div>
+                                                    {% elif data[0]['status']|int==101 %}
+                                                        <div class="alert alert-warning" role="alert">
+                                                            <strong>{{ data[0]['status_name'] }}</strong>
+                                                        </div>
+                                                    {% elif data[0]['status']|int==102 %}
+                                                        <div class="alert alert-success" role="alert">
+                                                            <strong>{{ data[0]['status_name'] }}</strong>
+                                                        </div>
+
+                                                    {% elif data[0]['status']|int==104 %}
+                                                        <div class="alert alert-success" role="alert">
+                                                            <strong>{{ data[0]['status_name'] }}</strong>
+                                                        </div>
+                                                    {% elif data[0]['status']|int==105 %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>{{ data[0]['status_name'] }}</strong>
+                                                        </div>
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                                <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-head-row">
+                                            <div class="card-title">Datos de la cotizacion.</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                                <div class="form-group col-lg-6">
+                                                    <label for="order_name">Fecha de entrega</label><br/>
+                                                    <input readonly type="datetime-local" class="form-control"
+                                                           data-time="{{ data[0]['order_receive'] }}"
+                                                           value="{{ data[0]['order_receive'] }}"
+                                                           name="order_receive" id="order_receive"/>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="date">Descuento(Per % )</label><br/>
+                                                    <strong><input readonly onChange="setTotals();" id="general_disc" class="form-control"
+                                                                   name="general_disc"
+                                                                   value="{{ data[0]['discount'] }}"/></strong>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="supplier">Subtotal</label><br/>
+                                                    <strong id="subtotal">{{ data[0]['subtotal'] }}</strong>
+                                                </div>
+
+
+                                                <div class="form-group col-lg-6">
+                                                    <label for="supplier">Descuento(Total)</label><br/>
+                                                    <strong id="total_disc">0.00</strong>
+                                                </div>
+
+                                                <div class="form-group col-lg-6">
+                                                    <label for="hour">Impuesto</label><br/>
+                                                    <strong id="tax">{{ data[0]['tax'] }}</strong>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="date">Total</label><br/>
+                                                    <strong id="total">
+
+                                                            {{ data[0]['total'] }}
+
+                                                    </strong>
+                                                </div>
+                                                <div class="form-group col-lg-6">
+                                                    <label for="notes">Notas</label><br/>
+                                                    <textarea name="notes" class="form-control"></textarea>
+                                                </div>
+
+                                            </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                                <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">Productos</h3>
+                                            </div>
+                                            <div class="panel-body table_panel">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover display" id="products_bill" cellspacing="0" width="100%">
+                                                      <thead>
+                                                        <th>Nombre</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Unidad</th>
+                                                        <th>Notas</th>
+                                                        <th>Precio Uni</th>
+                                                        <th>Impuesto(Per %)</th>
+                                                        <th>Total</th>
+                                                        <th style="width: 70px;">Accion</th>
+                                                      </thead>
+                                                      <tbody id="products_tbd">
+                                                            {% for piece in data %}
+                                                                {% if piece!=None %}
+                                                                    <tr >
+                                                                    <td>
+                                                                        <input name="{{ piece['sup_prod_productprecode'] }}|status" type="hidden"
+                                                                        value="11"/>
+                                                                        <input name="{{ piece['sup_prod_productprecode'] }}|precode" type="hidden"
+                                                                        value="{{ piece['sup_prod_productprecode'] }}"/>
+                                                                        <input name="{{ piece['sup_prod_productprecode'] }}|product_name" type="hidden"
+                                                                        value="{{ piece['sup_prod_product_name'] }}"/>
+                                                                        {{ piece['sup_prod_product_name'] }}</td>
+                                                                    <td>
+                                                                        {% if data[0]['status']|int==10 %}
+                                                                        <input onChange="price_set(this);" data-type="amount" class="form-control"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|amount"
+                                                                               value="{{ piece['sup_prod_amount'] }}"/>
+                                                                        {% elif data[0]['status']|int==101 %}
+                                                                            <input onChange="price_set(this);" data-type="amount" class="form-control"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|amount"
+                                                                               value="{{ piece['sup_prod_amount'] }}"/>
+                                                                        {% elif data[0]['status']|int>=102 %}
+                                                                            <input onChange="price_set(this);" readonly data-type="amount" class="form-control"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|amount"
+                                                                               value="{{ piece['sup_prod_amount'] }}"/>
+                                                                        {% endif %}
+                                                                         </td>
+                                                                    <td>{{ piece['sup_prod_unit'] }}</td>
+                                                                    <td>{{ piece['sup_prod_notes'] }}</td>
+                                                                    <td data-type="price_uni"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|price_uni">
+                                                                        {{ piece['order_price_uni'] }}
+                                                                    </td>
+                                                                    <td data-type="tax"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|tax">
+                                                                        {{ piece['order_tax'] }}</td>
+                                                                    <td data-type="total" type="text"
+                                                                               name="{{ piece['sup_prod_productprecode'] }}|total">{{ piece['order_total'] }}</td>
+                                                                    <td><button class="btn btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button></td>
+                                                                </tr>
+                                                                {% endif %}
+
+                                                             {% endfor %}
+                                                      </tbody>
+                                                    </table>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                            <div class="col-lg-2">
+
+                                            </div>
+                                            <div class="col-lg-2">
+
+                                            </div>
+                                            <div class="col-lg-2">
+
+                                            </div>
+                                            <div class="col-lg-2">
+
+                                            </div>
+                                    <div class="col-lg-2">
+                                        {% if data[0]['status']|int==101 %}
+                                            <input name="status" type="hidden" value="102"/>
+                                            <button id="save_bill"
+                                                    type="submit" class="btn btn-success"><i class="fa fa-send"></i> Aceptar la orden</button>
+                                        {% elif data[0]['status']|int==102 %}
+                                            <input name="status" type="hidden" value="104"/>
+                                            <button id="save_bill"
+                                                    type="submit" class="btn btn-success"><i class="fa fa-send"></i> Marcar como recibido</button>
+                                        {% elif data[0]['status']|int==104 %}
+                                            <button id="save_bill"
+                                                    type="submit" readonly class="btn btn-primary" disabled><i class="fa fa-send"></i> Historial del proceso</button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-lg-2">
+
+                                            </div>
+                                        </div>
+                                <br/>
+                            </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.3.2.1.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/popper.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js')}}"></script>
+
+        <!-- jQuery UI -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+        <!-- Chart JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart.js/chart.min.js')}}"></script>
+
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+        <!-- Chart Circle -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/chart-circle/circles.min.js')}}"></script>
+
+        <!-- Datatables -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/datatables/datatables.min.js')}}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+        <!-- Sweet Alert -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+        <!-- Atlantis JS -->
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/js/atlantis.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/select2.full.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/pdfmake.min.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/vfs_fonts.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='assets/bootbox/bootbox.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bill_model.js')}}"></script>
+
+    {% endblock %}
