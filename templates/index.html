@@ -5,87 +5,17 @@
         <style type="text/css">
             .important { color: #336699; }
         </style>
-
-        <link href="{{ url_for('static', filename='assets/c3/c3.min.css')}}" rel="stylesheet">
-        <script type="text/javascript" src="{{ url_for('static', filename='assets/d3/d3/dist/d3.min.js')}}"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='assets/c3/c3.js')}}"></script>
-        <script type="text/javascript">
-            $(function() {
-                var chart = c3.generate({
-                    bindto: '#chart',
-                    data: {
-                        columns: [
-                            ['data', 91.4]
-                        ],
-                        type: 'gauge',
-                        onclick: function (d, i) {
-                            console.log("onclick", d, i);
-                        },
-                        onmouseover: function (d, i) {
-                            console.log("onmouseover", d, i);
-                        },
-                        onmouseout: function (d, i) {
-                            console.log("onmouseout", d, i);
-                        }
-                    },
-                    gauge: {
-
-                    },
-                    color: {
-                        pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
-                        threshold: {
-                            //            unit: 'value', // percentage is default
-                            //            max: 200, // 100 is default
-                            values: [30, 60, 90, 100]
-                        }
-                    },
-                    size: {
-                        height: 180
-                    }
-                });
-
-                setTimeout(function () {
-                    chart.load({
-                        columns: [['data', 10]]
-                    });
-                }, 1000);
-
-                setTimeout(function () {
-                    chart.load({
-                        columns: [['data', 50]]
-                    });
-                }, 2000);
-
-                setTimeout(function () {
-                    chart.load({
-                        columns: [['data', 70]]
-                    });
-                }, 3000);
-
-                setTimeout(function () {
-                    chart.load({
-                        columns: [['data', 0]]
-                    });
-                }, 4000);
-
-                setTimeout(function () {
-                    chart.load({
-                        columns: [['data', 100]]
-                    });
-                }, 5000);
-            });
-            </script>
-        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/libs/sha.js')}}"></script>
     {% endblock %}
     {% block content %}
 	    <div class="main-panel">
 			<div class="content">
-				<div class="panel-header bg-primary-gradient">
+				<div class="panel-header bg-primary-gradient" style="display:none;">
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
+								<h2 class="text-white pb-2 fw-bold">
+									{{ user_details.name}}</h2>
 							</div>
 							<div class="ml-md-auto py-2 py-md-0">
 
@@ -93,38 +23,104 @@
 						</div>
 					</div>
 				</div>
-				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						<div class="col-md-8">
-                            <div class="card">
+				<div class="page-inner mt--5 panel_sys">
+					<div id="pos_prep" class="row mt--2">
+						<div class="col-md-12">
+                            <div class="card" id="pos">
                                 <div class="card-header">
                                     <div class="card-head-row">
-                                        <div class="card-title">Productos en minimos</div>
-                                        <div class="card-tools">
-                                            <a href="/products_min"  target="_blank" class="btn btn-primary btn-border btn-round"><i class="fa fa-eye"></i>Ver mas</a>
-                                            <a href="/request_orders" target="_blank" class="btn btn-warning btn-border btn-round"><i class="fa fa-truck"></i>Solicitar </a>
-                                        </div>
+                                        <div class="card-title">POS DISPONIBLES</div>
+                                        
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container" id="products_min">
-                                        {{ minproducts() }}
+                                    <div class="chart-container" id="pos_aviable">
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card" id="zones" style="display:none;">
+                                <div class="card-header">
+                                    <div class="card-head-row">
+                                        <div class="card-title"><button onclick="gobackPOS();"
+                                         class='btn btn-primary'><span class='btn-label'>
+                                            <i class='fa-solid fa-arrow-left'></i></span></button>  ZONAS DISPONIBLES</div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container" id="zones_aviable">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card" id="tables" style="display:none;">
+                                <div class="card-header">
+                                    <div class="card-head-row">
+                                        <div class="card-title">
+                                            <button onclick="gobackZones();"
+                                         class='btn btn-primary'><span class='btn-label'>
+                                            <i class='fa-solid fa-arrow-left'></i></span></button>   MESAS DISPONIBLES</div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="tables_aviable">
+                                        
+                                        
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                        <div class='col-md-4' >
-                            <div class="">
+                        
 
+					</div>
+
+                    <div id="orders" style="display:none;" class="row">
+                        <div class="card" id="tables">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <div class="card-title">
+                                        <button onclick="gobackDashboard();"
+                                     class='btn btn-primary'><span class='btn-label'>
+                                        <i class='fa-solid fa-arrow-left'></i></span></button>   ORDEN DE MESA: <span id="table_name"></span></div>
+                                    
+                                </div>
                             </div>
-                            <div id="cashbox_area">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div id="order_details" class="col-md-7">
+
+                                        <div id="products_selected" class="selected_prods">
+    
+                                        </div>
+                                        <div id="products_selected" class="buttoons_funciontals">
+                                            <button type="button" class="btn btn-success btn-lg btn-block"><i class="fa-solid fa-send"></i>Enviar</button>
+                                            <br/>
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-secondary">Imprimir Pre-cuenta</button>
+                                                <button type="button" class="btn btn-secondary">Imprimir Pre-cuenta<br/>Seleccionada</button>
+                                                <button type="button" class="btn btn-secondary">Cliente</button>
+                                                <button type="button" class="btn btn-secondary">Descuento</button>
+                                                <button type="button" class="btn btn-secondary">Precio</button>
+                                                <button type="button" class="btn btn-secondary">Borrar</button>
+                                            </div><br/>
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div id="product_details" class="product_div col-md-5">
+                                            
+                                    </div>
+                                </div>
+                                
 
                             </div>
                         </div>
-
-
-					</div>
+                            
+                    </div>
 				</div>
 			</div>
 

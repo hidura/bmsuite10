@@ -287,3 +287,48 @@ header .user_info {
 	}
 	body{background:#FFFFFF; color: #000000}
 }
+
+.pos_div {
+	padding:40px;
+}
+.pos_btn {
+	width: 150px;
+    height: 150px;
+	padding: 10px;
+}
+#tables_aviable {
+	max-width: 1024px;
+	margin: auto;
+	max-height: 540px;
+	border-radius: 0px 0px 6px 6px;
+	border-top: none;
+	height: 100%;
+}
+
+.product_name{
+	inline-size: 150px;
+	overflow-wrap: break-word;
+	hyphens: manual;
+	box-sizing: border-box;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 14px;
+	width: 100%;
+	padding: 3px;
+	padding-top: 15px;
+}
+.product_div{
+	overflow-y: auto;
+	height: 550px;
+}
+
+.selected_prods{
+	width: auto;
+	overflow-y: auto;
+	height: 450px;
+}
+
+.panel_sys{
+	position: relative;
+	top: 41px;
+}

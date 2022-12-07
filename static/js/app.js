@@ -3,11 +3,15 @@ var types={};
 var sugelico = {
     route:"/",
     type:types,
-    postServerCall: function(data, callback, route) {
+    postServerCall: function(data, callback, route, header) {
+        if (header===undefined || header===null){
+            header={}
+        }
         if (route===undefined  || route===null){
             route="/";
         }
         $.ajax({
+                headers:header,
                 url: route,
                 data: JSON.stringify(data),
                 contentType: "application/json",
@@ -63,66 +67,7 @@ var sugelico = {
                 }
 
         },
-    getTypes:function(target, type) {
-        success=function (result,status,xhr) {
-            if (target != null){
-                JSON.parse(result).forEach(function (field, index) {
-                    $(target).append($('<option />').val(field.code).html(field.tpname));
-                });
-
-            }
-            $(target).select2({
-                    height: "40px"
-            });
-        };
-        error = function (xhr,status,error){
-            console.log(error);
-        };
-        sugelico.getServerCall("classname=Types.Get&level="+type,success, error);
-    },
-    activateTableWithDataTable: function(table_name, tableTitle, printableColumns){
-        $(table_name).DataTable({
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por pagina",
-                "zeroRecords": "No se encontraron registros. Verificar que el text esta bien escrito.",
-                "info": "Mostrando pagina _PAGE_ of _PAGES_",
-                "infoEmpty": "No hay registros disponibles.",
-                "infoFiltered": "(De _MAX_ registros existentes.)",
-                "search": "Buscar",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                }
-            },
-            dom: 'B<"clear">lfrtip',
-            buttons: {
-                name: 'primary',
-                buttons: [ 
-                    'copy', 'csv', 'excel',
-                    {
-                        extend: 'pdf',
-                        title: tableTitle,
-                        text: 'PDF',
-                        exportOptions: {
-                            columns: printableColumns
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        title: tableTitle,
-                        text: 'Print',
-                        autoPrint: true,
-                        exportOptions: {
-                            columns: printableColumns
-                        }
-                    }
-                ]
-            }
-
-        });
-    },
+   
     getCookie:function(cname)
 {
     var name = cname + "=";
@@ -136,33 +81,7 @@ var sugelico = {
     }
     return "";
 },
-    activateTableWithDataTableWithoutBtns: function(table_name){
-        $(table_name).DataTable({
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ por página",
-                "zeroRecords": "No se encontraron registros. Verificar que el text está bien escrito.",
-                "info": "Mostrando página _PAGE_ of _PAGES_",
-                "infoEmpty": "No hay registros disponibles.",
-                "infoFiltered": "(De _MAX_ registros existentes.)",
-                "search": "Buscar",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                }
-            }
-        });
-    },
-    addInputDateSupport: function(){
-        $(".date").each(function(index, input){
-            $(input).datepicker({
-              dateFormat: "dd/mm/yy",
-              altFormat: "dd/mm/yy"
-            });
-        });
-    },
-    webservices:{user_get:"login.Get"},
+    
     numberWithCommas:function (x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -175,26 +94,6 @@ var sugelico = {
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    },
-
-    loadCategories:function(target, type) {
-        var catype="";
-        if (type!==undefined){
-            catype+='&cat_type='+type;
-        }
-        $.ajax({
-            url: '/?classname=Categories.Get'+catype,
-            type: 'get',
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                $(target).empty().append("<option value='0'>Seleccione uno</option>");
-
-                JSON.parse(data).forEach(function(piece, index){
-                    $(target).append($("<option/>").val(piece.code).html(piece.cat_name));
-                });
-            }
-        });
     },
     getSelectedValue:function (select) {
             var result = {};
@@ -209,37 +108,54 @@ var sugelico = {
                 }
             }
             return result;
+    }, getSHAOdooText: function(){
+        sha1(new Date());
+        var hash = sha1.create();
+        hash.update(new Date());
+        return hash.hex();
+
+    },getNumPad: function(){
+       return "<div class='col-md-6'><div class='row'>\
+                    <input type='text' disabled='disabled' id='amount_to_pick' value=''/>\
+                </div>\
+       <table>\
+            <tbody>\
+                    <tr>\
+                        <td><button class='btn btn-primary' onclick='setAmount(1)'>1</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(2)'>2</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(3)'>3</button></td>\
+                    <tr>\
+                        <td><button class='btn btn-primary' onclick='setAmount(4)'>4</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(5)'>5</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(6)'>6</button></td>\
+                    </tr>\
+                    <tr>\
+                        <td><button class='btn btn-primary' onclick='setAmount(7)'>4</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(8)'>5</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount(9)'>6</button></td>\
+                    </tr>\
+                    <tr>\
+                        <td><button class='btn btn-primary' onclick='setAmount(0)'>0</button></td>\
+                        <td><button class='btn btn-primary' onclick='setAmount('.')'>.</button></td>\
+                        <td><button class='btn btn-primary' onclick='delAmount()'><i class='fa-solid fa-delete-left'></i></button></td>\
+                    </tr>\
+                </tbody>\
+        </table>\
+        <div class='row'>\
+            <button type='button' onclick='addProductOrder()' class='btn btn-success btn-lg btn-block'><i class='fa-solid fa-accept'></i>Agregar</button>\
+        </div></div>"
     }
+
+
+    
 };
 
-$(document).ready(function() {
-
-    $("select").select2({
-            height: "40px"
-    });
-
-    sugelico.activateTableWithDataTable("#users_table", "Sugelico - Listado de usuarios", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#module_group_table", "Sugelico - Grupos de módulos", [0,1]);
-    sugelico.activateTableWithDataTable("#modules_table", "Sugelico - Módulos", [0,1,2]);
-	sugelico.activateTableWithDataTable("#contacts_table", "Sugelico - Listado de contactos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#products_table", "Sugelico - Listado de productos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#orders_table", "Sugelico - Orden de compra", [0,1,2,3,4,5]);
-    sugelico.activateTableWithDataTable("#suppliers_table", "Sugelico - Listado de suplidores", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#product_types_table", "Sugelico - Listado de tipo de productos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#category_types_table", "Sugelico - Listado de tipo de categorias", [0,1,2]);
-    sugelico.activateTableWithDataTable("#printers_table", "Sugelico - Listado de tipo de categorias", [0,1,2,3,4,5]);
-    sugelico.activateTableWithDataTable("#categories_table", "Sugelico - Listado de categorias", [0,1,2,3,4,5,6,7,8]);
-    sugelico.activateTableWithDataTable("#areas_table", "Sugelico - Listado de areas", [0,1,2]);
-    sugelico.activateTableWithDataTable("#units_table", "Sugelico - Listado de unidades", [0,1,2]);
-    sugelico.activateTableWithDataTable("#cashflow_table", "Sugelico - Cashflow Report", [0,1,2,3,4,5,6]);
-    sugelico.activateTableWithDataTable("#sales_rep_table", "Sugelico - Sales Report", [0,1,2]);
-    sugelico.activateTableWithDataTable("#gen606_table", "Sugelico - 606 Report", [0,1,2]);
-    sugelico.activateTableWithDataTable("#gen607_table", "Sugelico - 607 Report", [0,1,2]);
-
-    sugelico.activateTableWithDataTableWithoutBtns("#products_by_category_table");
-    sugelico.activateTableWithDataTableWithoutBtns("#products_by_category_table2");
 
 
-    sugelico.addInputDateSupport();
+// $(document).ready(function() {
+
+//     $("select").select2({
+//             height: "40px"
+//     });
     
-});
+// });

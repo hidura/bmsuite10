@@ -57,19 +57,7 @@ $(document).ready(function() {
 
     $("select").select2();
 
-    sugelico.activateTableWithDataTable("#users_table", "Sugelico - Listado de usuarios", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#module_group_table", "Sugelico - Grupos de módulos", [0,1]);
-    sugelico.activateTableWithDataTable("#modules_table", "Sugelico - Módulos", [0,1,2]);
-	sugelico.activateTableWithDataTable("#contacts_table", "Sugelico - Listado de contactos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#products_table", "Sugelico - Listado de productos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#orders_table", "Sugelico - Orden de compra", [0,1,2,3,4,5]);
-    sugelico.activateTableWithDataTable("#suppliers_table", "Sugelico - Listado de suplidores", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#product_types_table", "Sugelico - Listado de tipo de productos", [0,1,2,3]);
-    sugelico.activateTableWithDataTable("#category_types_table", "Sugelico - Listado de tipo de categorias", [0,1,2]);
-    sugelico.activateTableWithDataTable("#printers_table", "Sugelico - Listado de tipo de categorias", [0,1,2,3,4,5]);
-    sugelico.activateTableWithDataTable("#categories_table", "Sugelico - Listado de categorias", [0,1,2,3,4,5,6,7,8]);
-    sugelico.activateTableWithDataTable("#areas_table", "Sugelico - Listado de areas", [0,1,2]);
-    sugelico.activateTableWithDataTable("#units_table", "Sugelico - Listado de unidades", [0,1,2]);
+   
     
     
 });

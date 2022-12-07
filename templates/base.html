@@ -8,7 +8,8 @@
         <link href="{{ url_for('static', filename='assets/css/atlantis.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{ url_for('static', filename='css/select2.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{ url_for('static', filename='assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
-        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{ url_for('static', filename='css/app.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{ url_for('static', filename='assets/fontawesome/css/all.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css">
 
         <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
@@ -23,6 +24,14 @@
         <!-- Fonts and icons -->
         <script type="application/javascript" src="{{ url_for('static', filename='assets/js/plugin/webfont/webfont.min.js')}}"></script>
         <script type="application/javascript" src="{{ url_for('static', filename='js/jquery-1.10.2.min.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/products.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/categories.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/pos_config.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/pos_session.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/tables_order.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/pos_order.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/definition/Variants.js')}}"></script>
+        <script type="application/javascript" src="{{ url_for('static', filename='js/helpers.js')}}"></script>
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" media="all">
         <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fonts.min.css')}}" media="all"><script>
             WebFont.load({
@@ -39,7 +48,7 @@
     <div class="wrapper overlay-sidebar">
 		<div class="main-header">
 			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="white">
+			<div class="logo-header" data-background-color="red">
 
 				<a href="/index" class="logo">
 					<img src="{{ url_for('static', filename='images/logo/logo.svg')}}" alt="navbar brand" class="navbar-brand">
@@ -58,7 +67,7 @@
 			<!-- End Logo Header -->
 
 			<!-- Navbar Header -->
-			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="white">
+			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="red">
 
 				<div class="container-fluid">
 					<div class="collapse" id="search-nav">
@@ -74,32 +83,26 @@
 						</form>
 					</div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item toggle-nav-search hidden-caret">
+						<li class="nav-item toggle-nav-search">
 							<a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
 								<i class="fa fa-search"></i>
 							</a>
 						</li>
-						<li class="nav-item dropdown hidden-caret">
-							{{ user_details.messages }}
-						</li>
-						<li class="nav-item dropdown hidden-caret">
-							{{ user_details.notifications }}
-						</li>
-
+						
 						<li class="nav-item dropdown hidden-caret">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
 								<div class="avatar-sm">
-									<img src="{{ user_details.avatar }}" alt="..." class="avatar-img rounded-circle">
+									<img src="{{ url_for('static', filename='images/user_sugelico.svg')}}" alt="..." class="avatar-img rounded-circle">
 								</div>
 							</a>
 							<ul class="dropdown-menu dropdown-user animated fadeIn">
 								<div class="dropdown-user-scroll scrollbar-outer">
 									<li>
 										<div class="user-box">
-											<div class="avatar-lg"><img src="{{ user_details.avatar }}" alt="image profile" class="avatar-img rounded"></div>
+											<div class="avatar-lg"><img src="{{ url_for('static', filename='images/user_sugelico.svg')}}" alt="image profile" class="avatar-img rounded"></div>
 											<div class="u-text">
 												<h4>{{ user_details.name }}</h4>
-												<p class="text-muted">{{ user_details.email }}</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">Ver perfil</a>
+												<!--<p class="text-muted">{{ user_details.email }}</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">Ver perfil</a> -->
 											</div>
 										</div>
 									</li>
@@ -127,13 +130,13 @@
 				<div class="sidebar-content">
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
-							<img src="{{ user_details.avatar }}" alt="..." class="avatar-img rounded-circle">
+							<img src="{{ url_for('static', filename='images/user_sugelico.svg')}}" alt="..." class="avatar-img rounded-circle">
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
 									{{ user_details.name}}
-									<span class="user-level">{{ user_details.lastname }}</span>
+									<!--<span class="user-level">{{ user_details.lastname }}</span>-->
 									<span class="caret"></span>
 								</span>
 							</a>
@@ -152,7 +155,7 @@
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						{{ user_details.modules_group }}
+						<!--{{ user_details.modules_group }}-->
 					</ul>
 				</div>
 			</div>
