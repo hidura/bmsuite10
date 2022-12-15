@@ -1,4 +1,4 @@
-
+let mainproduct = null; 
 
 
 function openPOS(pos_id){
@@ -182,14 +182,20 @@ function addProductOrder(){
 
 }
 
-function afterload(){}
+function afterload(){
+    variantdb.searchByProductVariant(mainproduct.id).forEach(function(value, index){
+        
+    });
+}
 
 function addProduct(product_id){
-    let product = productsdb.searchById(product_id);
+    mainproduct = productsdb.searchById(product_id);
 
     var htmlStr=sugelico.getNumPad;
     var buttons={}
-    sugelico.openDialog("PRODUCTO: "+product.name,htmlStr,buttons,"large",afterload)
+    sugelico.openDialog("PRODUCTO: "+mainproduct.name,htmlStr,buttons,"large",afterload);
+
+
 
 
 }

@@ -116,7 +116,7 @@ var sugelico = {
 
     },getNumPad: function(){
        return "<div class='col-md-6'><div class='row'>\
-                    <input type='text' disabled='disabled' id='amount_to_pick' value=''/>\
+                    <input type='text' disabled='disabled' id='amount_to_pick' value='0'/>\
                 </div>\
        <table>\
             <tbody>\

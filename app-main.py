@@ -273,7 +273,6 @@ def getVariants():
         
         product_resp = requests.post(f"{path}/bmsclient/getVariants", json=json_info, headers={"Cookie":f"session_id={internal_id}"})
         products_list=json.loads(product_resp.content.decode())
-        print(products_list)
         return products_list['result']
 
 

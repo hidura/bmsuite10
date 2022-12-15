@@ -9,8 +9,9 @@ class variantnode {
         this.is_limited = value['is_limited'];
         this.is_required = value['is_required'];
         this.sequence = value['sequence'];
-        this.product_target=value['product_target']
-        this.product_variant=value['product_variant']
+        this.product_target=value['product_target'];
+        this.product_variant=value['product_variant'];
+        this.product_product=value['product_product']
     }
 }
 
@@ -66,10 +67,22 @@ class Variants {
 
     searchByProductVariant(product){
         let self=this;
-        let variant=[];
+        let variant={"term":[],"suggested":[],
+    "optional":[],"companion":[]};
         this.variants.forEach(function(value, index){
-           if (product === value.product[1]){variant.push(value);} 
+            if (parseInt(product) === value.product_product[0]){
+                if (value.type==="term"){
+                    
+                    variant[value.type].push({"id":false,
+                    "name":value.display_name});
+                }else{
+
+                    variant[value.type].push({"id":value.product_target[0],
+                    "name":value.product_target[1]});
+                }
+            } 
         });
+        
         return variant;
     }
 
